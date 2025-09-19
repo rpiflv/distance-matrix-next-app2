@@ -21,6 +21,13 @@ const CommuteForm: React.FC<CommuteFormProps> = ({ onCommuteResults }) => {
         setDestinations([...destinations, '']);
     };
 
+    const removeDestination = (index: number) => {
+        if (destinations.length > 1) {
+            const newDestinations = destinations.filter((_, i) => i !== index);
+            setDestinations(newDestinations);
+        }
+    };
+
     const handleCsvFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -142,19 +149,38 @@ const CommuteForm: React.FC<CommuteFormProps> = ({ onCommuteResults }) => {
                         </button>
                     </div>
                     {destinations.map((destination, index) => (
-                        <div key={index} style={{ marginBottom: '10px' }}>
+                        <div key={index} style={{ marginBottom: '10px', display: 'flex', gap: '8px', alignItems: 'center' }}>
                             <input
                                 type="text"
                                 value={destination}
                                 onChange={(e) => handleDestinationChange(index, e.target.value)}
                                 placeholder={`Enter destination ${index + 1} address`}
                                 style={{ 
-                                    width: '100%', 
+                                    flex: 1, 
                                     padding: '8px', 
                                     border: '1px solid #ccc',
                                     borderRadius: '4px'
                                 }}
                             />
+                            {destinations.length > 1 && (
+                                <button
+                                    type="button"
+                                    onClick={() => removeDestination(index)}
+                                    style={{
+                                        padding: '8px 12px',
+                                        backgroundColor: '#ff4444',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        fontSize: '14px',
+                                        minWidth: '60px'
+                                    }}
+                                    title="Remove this destination"
+                                >
+                                    ✕ Remove
+                                </button>
+                            )}
                         </div>
                     ))}
                 </div>
