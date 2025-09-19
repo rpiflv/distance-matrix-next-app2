@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { CommuteResponse } from '../types';
+import { GoogleDistanceMatrixResponse } from '../types';
 
 interface CommuteFormProps {
-    onCommuteResults: (results: CommuteResponse[]) => void;
+    onCommuteResults: (results: GoogleDistanceMatrixResponse) => void;
 }
 
 const CommuteForm: React.FC<CommuteFormProps> = ({ onCommuteResults }) => {
@@ -10,6 +10,8 @@ const CommuteForm: React.FC<CommuteFormProps> = ({ onCommuteResults }) => {
     const [destinations, setDestinations] = useState<string[]>(['']);
     const [csvFile, setCsvFile] = useState<File | null>(null);
     const [error, setError] = useState('');
+    const [departureTime, setDepartureTime] = useState('');
+    const [useCurrentTime, setUseCurrentTime] = useState(true);
 
     const handleDestinationChange = (index: number, value: string) => {
         const newDestinations = [...destinations];
@@ -109,6 +111,42 @@ const CommuteForm: React.FC<CommuteFormProps> = ({ onCommuteResults }) => {
                             style={{ width: '100%', padding: '8px', marginTop: '5px' }}
                         />
                     </label>
+                </div>
+
+                <div style={{ marginBottom: '20px' }}>
+                    <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '10px' }}>
+                        🚌 Public Transit Options:
+                    </label>
+                    <div style={{ backgroundColor: '#f0f8ff', padding: '15px', borderRadius: '8px', border: '1px solid #d0d0d0' }}>
+                        <div style={{ marginBottom: '10px' }}>
+                            <label style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                                <input
+                                    type="checkbox"
+                                    checked={useCurrentTime}
+                                    onChange={(e) => setUseCurrentTime(e.target.checked)}
+                                    style={{ marginRight: '8px' }}
+                                />
+                                Use current time for departure
+                            </label>
+                        </div>
+                        {!useCurrentTime && (
+                            <div style={{ marginBottom: '10px' }}>
+                                <label style={{ display: 'block', marginBottom: '5px' }}>
+                                    Departure Time:
+                                    <input
+                                        type="datetime-local"
+                                        value={departureTime}
+                                        onChange={(e) => setDepartureTime(e.target.value)}
+                                        style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+                                        min={new Date().toISOString().slice(0, 16)}
+                                    />
+                                </label>
+                            </div>
+                        )}
+                        <small style={{ color: '#666', fontSize: '12px' }}>
+                            ℹ️ Results include bus, train, subway, and rail connections with preference for fewer transfers.
+                        </small>
+                    </div>
                 </div>
 
                 <div style={{ marginBottom: '20px' }}>
