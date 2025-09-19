@@ -51,7 +51,6 @@ const CommuteForm: React.FC<CommuteFormProps> = ({ onCommuteResults }) => {
 
     return (
         <div>
-            <h1>Commute Time Calculator</h1>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>
